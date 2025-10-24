@@ -10,11 +10,6 @@ app.use(cors());
 app.use(express.json());
 const seedFixtures = require('./routes/seedFixtures');
 app.use('/', seedFixtures);
-
-//mongoose.connect('mongodb+srv://firoskk_db_user:vcAWCf88VwHjwdD4@mycluster.3dyl5nf.mongodb.net/?retryWrites=true&w=majority&appName=mycluster')
-//app.use('/api/matches', matchRoutes);
-//mongoose
-//.connect('mongodb+srv://firoskk_db_user:vcAWCf88VwHjwdD4@mycluster.3dyl5nf.mongodb.net/?retryWrites=true&w=majority&appName=mycluster')
 mongoose.connect(process.env.MONGO_URI)
     .then(async () => {
         //console.log('MongoDB connected');
@@ -46,3 +41,4 @@ async function patchMatchNumbers() {
 
     mongoose.disconnect();
 }
+
