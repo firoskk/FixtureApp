@@ -51,7 +51,7 @@ const FootballFixture = () => {
                 <option value="U14 Girls">Girls</option>
                 <option value="Gents">Gents</option>
             </select>
-            {/*
+
             <table border="1" cellPadding="8" style={{ marginTop: '20px', width: '70%' }}>
                 <thead>
                     <tr>
@@ -85,7 +85,7 @@ const FootballFixture = () => {
                                         />
                                         <button onClick={() => handleSave(match._id)}>Save</button>
                                         <button onClick={() => setEditingMatchId(null)}>Cancel</button>
-                                
+
                                     </>
                                 ) : (
                                     <>
@@ -113,14 +113,13 @@ const FootballFixture = () => {
                         </tr>
                     ))}
                 </tbody>
-            </table> */}
-            <table className="match-table">
+            </table>
+            {/*<table className="match-table">
                 <thead>
                     <tr>
                         <th>Match #</th>
                         <th>Team A</th>
                         <th>Team B</th>
-                        {/*<th>Ground</th>*/}
                         <th>Result</th>
                         <th>Winner</th>
                     </tr>
@@ -131,7 +130,6 @@ const FootballFixture = () => {
                             <td>{match.matchNumber}</td>
                             <td>{match.teamA || 'TBD'}</td>
                             <td>{match.teamB || 'TBD'}</td>
-                            {/*<td>{match.ground}</td>*/}
                             <td>
                                 {editingMatchId === match._id ? (
                                     <>
@@ -171,7 +169,7 @@ const FootballFixture = () => {
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </table>*/}
         </div>
     );
 };
