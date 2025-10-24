@@ -9,8 +9,8 @@ const FootballFixture = () => {
 
     useEffect(() => {
         if (!category) return;
-        axios
-            .get(`http://localhost:5000/api/matches?sport=football&category=${category}`)
+        axios 
+            .get(`https://fixtureapp-backend.onrender.com/api/matches?sport=football&category=${category}`)
             .then(res => setMatches(res.data))
             .catch(err => console.error('Error fetching football fixtures:', err));
     }, [category]);
@@ -25,7 +25,7 @@ const FootballFixture = () => {
         }
 
         try {
-            await axios.post(`http://localhost:5000/api/matches/${matchId}/result`, {
+            await axios.post(`https://fixtureapp-backend.onrender.com/api/matches/${matchId}/result`, {
                 teamA: teamAScore,
                 teamB: teamBScore
             });
@@ -33,7 +33,7 @@ const FootballFixture = () => {
             setEditingMatchId(null);
             // Refresh matches
             axios
-                .get(`http://localhost:5000/api/matches?sport=football&category=${category}`)
+                .get(`https://fixtureapp-backend.onrender.com/api/matches?sport=football&category=${category}`)
                 .then(res => setMatches(res.data));
         } catch (err) {
             console.error('Error saving result:', err);
@@ -118,5 +118,6 @@ const FootballFixture = () => {
         </div>
     );
 };
+
 
 export default FootballFixture;
