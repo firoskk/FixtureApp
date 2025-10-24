@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './App.css'
 
 const FootballFixture = () => {
     const [matches, setMatches] = useState([]);
@@ -9,8 +10,8 @@ const FootballFixture = () => {
 
     useEffect(() => {
         if (!category) return;
-        axios 
-            .get(`https://fixtureapp-backend.onrender.com/api/matches?sport=football&category=${category}`)
+        axios
+            .get(`${process.env.REACT_APP_API_BASE_URL}/api/matches?sport=football&category=${category}`)
             .then(res => setMatches(res.data))
             .catch(err => console.error('Error fetching football fixtures:', err));
     }, [category]);
@@ -25,7 +26,7 @@ const FootballFixture = () => {
         }
 
         try {
-            await axios.post(`https://fixtureapp-backend.onrender.com/api/matches/${matchId}/result`, {
+            await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/matches/${matchId}/result`, {
                 teamA: teamAScore,
                 teamB: teamBScore
             });
@@ -33,7 +34,7 @@ const FootballFixture = () => {
             setEditingMatchId(null);
             // Refresh matches
             axios
-                .get(`https://fixtureapp-backend.onrender.com/api/matches?sport=football&category=${category}`)
+                .get(`${process.env.REACT_APP_API_BASE_URL}/api/matches?sport=football&category=${category}`)
                 .then(res => setMatches(res.data));
         } catch (err) {
             console.error('Error saving result:', err);
@@ -50,8 +51,70 @@ const FootballFixture = () => {
                 <option value="U14 Girls">Girls</option>
                 <option value="Gents">Gents</option>
             </select>
-
+            {/*
             <table border="1" cellPadding="8" style={{ marginTop: '20px', width: '70%' }}>
+                <thead>
+                    <tr>
+                        <th>Match #</th>
+                        <th>Team A</th>
+                        <th>Team B</th>
+                        <th>Result</th>
+                        <th>Winner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {matches.map(match => (
+                        <tr key={match._id}>
+                            <td>{match.matchNumber}</td>
+                            <td>{match.teamA || 'TBD'}</td>
+                            <td>{match.teamB || 'TBD'}</td>
+                            <td>
+                                {editingMatchId === match._id ? (
+                                    <>
+                                        <input
+                                            type="number"
+                                            value={editedScores.teamA}
+                                            onChange={e => setEditedScores({ ...editedScores, teamA: e.target.value })}
+                                            placeholder="Team A score"
+                                        />
+                                        <input
+                                            type="number"
+                                            value={editedScores.teamB}
+                                            onChange={e => setEditedScores({ ...editedScores, teamB: e.target.value })}
+                                            placeholder="Team B score"
+                                        />
+                                        <button onClick={() => handleSave(match._id)}>Save</button>
+                                        <button onClick={() => setEditingMatchId(null)}>Cancel</button>
+                                
+                                    </>
+                                ) : (
+                                    <>
+                                        {match.result ? `${match.result.teamA} - ${match.result.teamB}`
+                                            : 'Not yet played'
+                                        }
+                                        <button
+                                            style={{ marginLeft: '10px' }}
+                                            onClick={() => {
+                                                setEditingMatchId(match._id);
+                                                setEditedScores({
+                                                    teamA: match.result?.teamA ?? '',
+                                                    teamB: match.result?.teamB ?? ''
+                                                });
+                                            }}
+                                        >
+                                            Edit
+                                        </button>
+                                    </>
+                                )}
+                            </td>
+                            <td>
+                                {match.result?.winner || 'TBD'}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table> */}
+            <table className="match-table">
                 <thead>
                     <tr>
                         <th>Match #</th>
@@ -86,15 +149,11 @@ const FootballFixture = () => {
                                         />
                                         <button onClick={() => handleSave(match._id)}>Save</button>
                                         <button onClick={() => setEditingMatchId(null)}>Cancel</button>
-                                        {/*<button onClick={() => handleReset(match._id)}>Reset</button>*/}
                                     </>
                                 ) : (
                                     <>
-                                        {match.result ? `${match.result.teamA} - ${match.result.teamB}`
-                                            : 'Not yet played'
-                                        }
+                                        {match.result ? `${match.result.teamA} - ${match.result.teamB}` : 'Not yet played'}
                                         <button
-                                            style={{ marginLeft: '10px' }}
                                             onClick={() => {
                                                 setEditingMatchId(match._id);
                                                 setEditedScores({
@@ -108,9 +167,7 @@ const FootballFixture = () => {
                                     </>
                                 )}
                             </td>
-                            <td>
-                                {match.result?.winner || 'TBD'}
-                            </td>
+                            <td>{match.result?.winner || 'TBD'}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -118,6 +175,5 @@ const FootballFixture = () => {
         </div>
     );
 };
-
 
 export default FootballFixture;
