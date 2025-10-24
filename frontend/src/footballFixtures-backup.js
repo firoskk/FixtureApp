@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
-
-
 function FootballFixtures() {
     const [matches, setMatches] = useState([]);
     const [category, setCategory] = useState('');
     const categories = ['U10 Boys', 'U13 Boys', 'U17 Boys', 'U14 Girls', 'Gents'];
 
-    /*
+    /*neew code 
         useEffect(() => {
             axios.get('http://localhost:5000/api/matches?sport=football')
                 .then(res => setMatches(res.data))
@@ -45,4 +42,5 @@ function FootballFixtures() {
         </div>
     );
 }
+
 export default FootballFixtures;
