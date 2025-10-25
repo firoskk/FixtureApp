@@ -51,7 +51,13 @@ const FootballFixture = () => {
                 <option value="U14 Girls">Girls</option>
                 <option value="Gents">Gents</option>
             </select>
-
+            {Array.isArray(matches) ? (
+              matches.map(match => (
+              <tr key={match._id}>...</tr>
+              ))
+            ) : (
+             <p>Failed to load matches.</p>
+             )}
             <table border="1" cellPadding="8" style={{ marginTop: '20px', width: '70%' }}>
                 <thead>
                     <tr>
@@ -173,5 +179,6 @@ const FootballFixture = () => {
         </div>
     );
 };
+
 
 export default FootballFixture;
