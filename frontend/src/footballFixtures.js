@@ -58,6 +58,7 @@ const FootballFixture = () => {
             ) : (
              <p>Failed to load matches.</p>
              )}
+         Array.isArray(matches) && matches.length > 0 ? (
             <table border="1" cellPadding="8" style={{ marginTop: '20px', width: '70%' }}>
                 <thead>
                     <tr>
@@ -176,9 +177,13 @@ const FootballFixture = () => {
                     ))}
                 </tbody>
             </table>*/}
+            ) : (
+            <p>No matches found or failed to load.</p>
+            )}
         </div>
     );
 };
 
 
 export default FootballFixture;
+
