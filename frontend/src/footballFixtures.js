@@ -4,7 +4,7 @@ import './App.css'
 
 const FootballFixture = () => {
     const [matches, setMatches] = useState([]);
-    const [category, setCategory] = useState('Gents');
+    const [category, setCategory] = useState('U10 Boys');
     const [editingMatchId, setEditingMatchId] = useState(null);
     const [editedScores, setEditedScores] = useState({ teamA: '', teamB: '' });
 
@@ -24,13 +24,11 @@ const FootballFixture = () => {
             alert('Scores must be positive numbers');
             return;
         }
-
         try {
             await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/matches/${matchId}/result`, {
                 teamA: teamAScore,
                 teamB: teamBScore
             });
-            //alert('Result saved!');
             setEditingMatchId(null);
             // Refresh matches
             axios
@@ -51,15 +49,7 @@ const FootballFixture = () => {
                 <option value="U14 Girls">Girls</option>
                 <option value="Gents">Gents</option>
             </select>
-            {Array.isArray(matches) ? (
-              matches.map(match => (
-              <tr key={match._id}>...</tr>
-              ))
-            ) : (
-             <p>Failed to load matches.</p>
-             )}
-         Array.isArray(matches) && matches.length > 0 ? (
-            <table border="1" cellPadding="8" style={{ marginTop: '20px', width: '70%' }}>
+            <table className="match-table">
                 <thead>
                     <tr>
                         <th>Match #</th>
@@ -69,6 +59,7 @@ const FootballFixture = () => {
                         <th>Winner</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
                 <tbody>
                     {matches.map(match => (
                         <tr key={match._id}>
@@ -121,69 +112,8 @@ const FootballFixture = () => {
                     ))}
                 </tbody>
             </table>
-            {/*<table className="match-table">
-                <thead>
-                    <tr>
-                        <th>Match #</th>
-                        <th>Team A</th>
-                        <th>Team B</th>
-                        <th>Result</th>
-                        <th>Winner</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {matches.map(match => (
-                        <tr key={match._id}>
-                            <td>{match.matchNumber}</td>
-                            <td>{match.teamA || 'TBD'}</td>
-                            <td>{match.teamB || 'TBD'}</td>
-                            <td>
-                                {editingMatchId === match._id ? (
-                                    <>
-                                        <input
-                                            type="number"
-                                            value={editedScores.teamA}
-                                            onChange={e => setEditedScores({ ...editedScores, teamA: e.target.value })}
-                                            placeholder="Team A score"
-                                        />
-                                        <input
-                                            type="number"
-                                            value={editedScores.teamB}
-                                            onChange={e => setEditedScores({ ...editedScores, teamB: e.target.value })}
-                                            placeholder="Team B score"
-                                        />
-                                        <button onClick={() => handleSave(match._id)}>Save</button>
-                                        <button onClick={() => setEditingMatchId(null)}>Cancel</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        {match.result ? `${match.result.teamA} - ${match.result.teamB}` : 'Not yet played'}
-                                        <button
-                                            onClick={() => {
-                                                setEditingMatchId(match._id);
-                                                setEditedScores({
-                                                    teamA: match.result?.teamA ?? '',
-                                                    teamB: match.result?.teamB ?? ''
-                                                });
-                                            }}
-                                        >
-                                            Edit
-                                        </button>
-                                    </>
-                                )}
-                            </td>
-                            <td>{match.result?.winner || 'TBD'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>*/}
-            ) : (
-            <p>No matches found or failed to load.</p>
-            )}
-        </div>
+        </div >
     );
 };
 
-
 export default FootballFixture;
-
