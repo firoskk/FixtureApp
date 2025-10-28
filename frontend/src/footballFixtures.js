@@ -14,7 +14,7 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
     console.log(`Base URL : ${baseURL}`);
     useEffect(() => {
         if (!category) return;
-        console.log(`Just before GET Base URL : ${baseURL}`);
+        console.log(` L1 Just before GET Base URL : ${baseURL}`);
         axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/matches?sport=football&category=${category}`)
             .then(res => {
                 setMatches(res.data);
@@ -22,10 +22,10 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
                     const stats = computePointsTable(res.data);
                     setPointsTable(stats);
                 //}
-                console.log(` After GET before map Category : ${match.category}`);
+                console.log(`L2 After GET before map Category : ${res.category}`);
                 //Test code
                 matches.map(match => {
-                    console.log(`Category ${match.category}`);
+                    console.log(`L3 Category ${match.category}`);
                 });
                 //
 
@@ -296,6 +296,7 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 }
 
 export default FootballFixture;
+
 
 
 
