@@ -10,7 +10,7 @@ const FootballFixture = () => {
     //Points.
     const [pointsTable, setPointsTable] = useState([]);
     const [view, setView] = useState('fixtures'); // 'fixtures' or 'points'
-const baseURL = process.env.REACT_APP_API_BASE_URL;
+    const baseURL = process.env.REACT_APP_API_BASE_URL;
     console.log(`Base URL : ${baseURL}`);
     useEffect(() => {
         if (!category) return;
@@ -22,12 +22,13 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
                     const stats = computePointsTable(res.data);
                     setPointsTable(stats);
                 //}
-                console.log(`L2 After GET before map Category : ${res.category}`);
-                //Test code
-                matches.map(match => {
-                    console.log(`L3 Category ${match.category}`);
-                });
-                //
+                console.log(`L2 After GET before map Category : ${category}`);
+               
+                if (matches.length > 0) {
+                    matches.forEach(match => {
+                        console.log(`L3(after state update) Category: ${match.category}`);
+                    });
+                }
 
             })
             .catch(err => {
@@ -296,6 +297,7 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 }
 
 export default FootballFixture;
+
 
 
 
