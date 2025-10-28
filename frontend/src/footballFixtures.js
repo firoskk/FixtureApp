@@ -9,17 +9,17 @@ const FootballFixture = () => {
     const [editedScores, setEditedScores] = useState({ teamA: '', teamB: '' });
     //Points.
     const [pointsTable, setPointsTable] = useState([]);
-    const [view, setView] = useState('fixtures'); // 'fixtures' or 'points'
+    const [view, setView] = useState('points'); // 'fixtures' or 'points'
 
     useEffect(() => {
         if (!category) return;
         axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/matches?sport=football&category=${category}`)
             .then(res => {
                 setMatches(res.data);
-                if ((view === 'points') && (category === 'U17 Boys' || category === 'U14 Girls')) {
+                //if ((view === 'points') && (category === 'U17 Boys' || category === 'U14 Girls')) {
                     const stats = computePointsTable(res.data);
                     setPointsTable(stats);
-                }
+                //}
 
             })
             .catch(err => {
@@ -286,4 +286,5 @@ const FootballFixture = () => {
         });
     }
 }
+
 export default FootballFixture;
