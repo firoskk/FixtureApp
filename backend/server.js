@@ -10,14 +10,15 @@ app.use(cors());
 app.use(express.json());
 const seedFixtures = require('./routes/seedFixtures');
 app.use('/', seedFixtures);
+
 mongoose.connect(process.env.MONGO_URI)
+
     .then(async () => {
-        //console.log('MongoDB connected');
+        console.log('MongoDB connected');
 
         // await patchMatchNumbers(); 
 
         app.use('/api/matches', matchRoutes);
-        //app.listen(5000, () => console.log('Server running on port 5000'));
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
@@ -26,8 +27,6 @@ mongoose.connect(process.env.MONGO_URI)
         });
     })
     .catch(err => console.error('MongoDB connection error:', err));
-
-//app.listen(5000, () => console.log('Server running on port 5000'));
 
 //This is temp code to patch up the database - whenever there is a schema changes.
 async function patchMatchNumbers() {
@@ -41,4 +40,3 @@ async function patchMatchNumbers() {
 
     mongoose.disconnect();
 }
-
