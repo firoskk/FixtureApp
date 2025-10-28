@@ -22,7 +22,7 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
                     const stats = computePointsTable(res.data);
                     setPointsTable(stats);
                 //}
-                
+                console.log(` After GET before map Category : ${match.category}`);
                 //Test code
                 matches.map(match => {
                     console.log(`Category ${match.category}`);
@@ -296,6 +296,7 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 }
 
 export default FootballFixture;
+
 
 
 
