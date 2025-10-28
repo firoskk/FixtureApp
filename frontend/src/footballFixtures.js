@@ -9,11 +9,12 @@ const FootballFixture = () => {
     const [editedScores, setEditedScores] = useState({ teamA: '', teamB: '' });
     //Points.
     const [pointsTable, setPointsTable] = useState([]);
-    const [view, setView] = useState('points'); // 'fixtures' or 'points'
+    const [view, setView] = useState('fixtures'); // 'fixtures' or 'points'
 const baseURL = process.env.REACT_APP_API_BASE_URL;
     console.log(`Base URL : ${baseURL}`);
     useEffect(() => {
         if (!category) return;
+        console.log(`Just before GET Base URL : ${baseURL}`);
         axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/matches?sport=football&category=${category}`)
             .then(res => {
                 setMatches(res.data);
@@ -21,9 +22,9 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
                     const stats = computePointsTable(res.data);
                     setPointsTable(stats);
                 //}
+                
                 //Test code
                 matches.map(match => {
-
                     console.log(`Category ${match.category}`);
                 });
                 //
@@ -295,5 +296,6 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 }
 
 export default FootballFixture;
+
 
 
