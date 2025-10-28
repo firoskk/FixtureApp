@@ -6,6 +6,7 @@ const Match = require('../models/Match');
 router.get('/', async (req, res) => {
     const { sport, category } = req.query;
     const filter = {};
+
     if (sport) filter.sport = new RegExp(`^${sport}$`, 'i');
     if (category) filter.category = new RegExp(`^${category}$`, 'i');
 
@@ -18,8 +19,31 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.put('/:id/result', async (req, res) => {
+    const { category, ground, teamA, teamB } = req.body;
+    if (category !== 'U17 Boys' && category !== 'U14 Girls') {
+        return res.status(400).json({ error: 'Invalid category for final match update' });
+    }
+    try {
+        const match = await Match.findOne({ ground: 'final', category });
+
+        if (!match) {
+            return res.status(404).json({ error: 'Final match not found for this category' });
+        }
+        //console.log(`Finalist 1: ${teamA}, Finalist 2: ${teamB}`);
+        match.teamA = teamA;
+        match.teamB = teamB;
+        await match.save();
+        res.json({ message: 'Final match updated successfully', match });
+    } catch (err) {
+        console.error('Error updating final match:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // POST result and auto-generate next round
 router.post('/:id/result', async (req, res) => {
+
     try {
         const { teamA, teamB } = req.body;
         const match = await Match.findById(req.params.id);
@@ -29,16 +53,13 @@ router.post('/:id/result', async (req, res) => {
         match.result = { teamA, teamB, winner };
         await match.save();
 
-        // const nextRound = match.round + 1;
-        //console.log(`Calling getCustomProgression with category: ${match.category}, matchNumber: ${match.matchNumber}`);
         // Find placeholder match with empty slots
         const progression = getCustomProgression({
             category: match.category,
             matchNumber: match.matchNumber
         });
         if (progression) {
-            console.log(`Match ${match.matchNumber} winner: ${winner}`);
-            console.log('Progression:', progression);
+
             const target = await Match.findOne({
                 sport: match.sport,
                 category: match.category,
@@ -60,55 +81,10 @@ router.post('/:id/result', async (req, res) => {
         res.status(500).send('Error saving result');
     }
 });
-router.post('/:id/reset', async (req, res) => {
-    try {
-        const match = await Match.findById(req.params.id);
-        if (!match || !match.result?.winner) {
-            return res.status(404).send('Match not found or no winner to reset');
-        }
 
-        const winner = match.result.winner;
-
-        // ✅ Only clear result fields — preserve teamA and teamB
-        match.result = { teamA: null, teamB: null, winner: null };
-        await match.save();
-
-        // ✅ Find downstream matches that used this winner
-        const downstreamMatches = await Match.find({
-            sport: match.sport,
-            category: match.category,
-            $or: [{ teamA: winner }, { teamB: winner }]
-        });
-
-        for (const m of downstreamMatches) {
-            let updated = false;
-
-            if (m.teamA === winner) {
-                m.teamA = null;
-                updated = true;
-            }
-            if (m.teamB === winner) {
-                m.teamB = null;
-                updated = true;
-            }
-
-            if (updated) {
-                m.result = { teamA: null, teamB: null, winner: null };
-                await m.save();
-            }
-        }
-
-        res.send({ message: 'Match and downstream matches reset' });
-    } catch (err) {
-        console.error('Reset error:', err);
-        res.status(500).send('Reset failed');
-    }
-});
 module.exports = router;
 
 function getCustomProgression({ category, matchNumber }) {
-
-    // console.log(`category : ${category} match : ${matchNumber}`);
 
     if (category === 'U10 Boys') {
         if (matchNumber === 1) {
