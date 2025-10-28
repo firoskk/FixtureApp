@@ -29,6 +29,12 @@ const FootballFixture = () => {
                         console.log(`L3(after state update) Category: ${match.category}`);
                     });
                 }
+                else
+                {
+                    res.data.forEach(match => {
+                    console.log(`Length is 0 : L3 Category: ${match.category}`);
+                    });
+                }
 
             })
             .catch(err => {
@@ -297,6 +303,7 @@ const FootballFixture = () => {
 }
 
 export default FootballFixture;
+
 
 
 
